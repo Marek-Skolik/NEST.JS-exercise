@@ -1,18 +1,39 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Delete, ParseUUIDPipe, NotFoundException, Body } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { CreateOrderDTO } from './create-order-dto';
+import { UpdateOrderDTO } from './update-order-dto';
 
 @Controller('orders')
-    export class OrdersController {
+export class OrdersController {
+  constructor(private orderService: OrdersService) {}
 
-    constructor(private ordersService: OrdersService) {}
+  @Get('/')
+  getAll(): any {
+    return this.orderService.getAll();
+  }
 
-    @Get('/')
-    getAll(): any {
-    return this.ordersService.getAll();
-    }
-    
-    @Get('/:id')
-    getById(@Param('id') id: string) {
-    return this.ordersService.getById(id);
-    }
+  @Get('/:id')
+  getById(@Param('id') id: string) {
+    return this.orderService.getById(id);
+  } 
+
+  @Delete('/:id')
+  removeOrder(@Param('id', new ParseUUIDPipe()) id: string) {
+    this.orderService.deleteById(id);
+    return { success: true }
+  }
+
+  @Post('/')
+  create(@Body() orderData: CreateOrderDTO) {
+    return this.orderService.post(orderData)
+  }
+
+  @Put('/:id')
+  update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() orderData: UpdateOrderDTO,
+  ) {
+    this.orderService.put(id, orderData);
+    return { success: true };
+  }
 }
