@@ -25,7 +25,7 @@ export class OrdersController {
 
   @Post('/')
   create(@Body() orderData: CreateOrderDTO) {
-    return this.orderService.post(orderData)
+    return this.orderService.create(orderData)
   }
 
   @Put('/:id')
@@ -33,7 +33,7 @@ export class OrdersController {
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() orderData: UpdateOrderDTO,
   ) {
-    this.orderService.put(id, orderData);
+    this.orderService.updateById(id, orderData);
     return { success: true };
   }
 }
