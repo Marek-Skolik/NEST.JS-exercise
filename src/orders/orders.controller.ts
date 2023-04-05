@@ -19,7 +19,7 @@ export class OrdersController {
 
   @Delete('/:id')
   removeOrder(@Param('id', new ParseUUIDPipe()) id: string) {
-    this.orderService.deleteById(id);
+    this.orderService.removeOrder(id);
     return { success: true }
   }
 
